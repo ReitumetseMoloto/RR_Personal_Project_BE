@@ -29,6 +29,14 @@ const BookingSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    civic_Service:{
+        type: String,
+        enum: {
+            values: ["ID", "Passport"],
+            message: "Please choose civic service using the above options",
+        },
+        required: true
+    },
     dateTime:{
         type: Date,
         required: true

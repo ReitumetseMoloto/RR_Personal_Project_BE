@@ -35,7 +35,8 @@ router.post('/post', async(req,res)=>{
         id_Number: req.body.id_Number,
         gender: req.body.gender,
         cellphone_Number: req.body.cellphone_Number,
-        email: req.body.cellphone_Number,
+        email: req.body.email,
+        civic_Service: req.body.civic_Service,
         dateTime: req.body.dateTime 
     });
    try{
@@ -50,9 +51,9 @@ router.post('/post', async(req,res)=>{
 });
 
 //delete booking
-router.delete('/:deletebyId', async(req,res)=>{
+router.delete('/:IDNumber', async(req,res)=>{
     try{
-        const removeBooking = await Booking.deleteOne({_id: req.params.deletebyId})
+        const removeBooking = await Booking.deleteOne({id_Number: req.params.IDNumber})
         res.json(removeBooking);
     }
     catch(error){
