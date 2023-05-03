@@ -14,6 +14,27 @@ router.get('/get', async(req,res) =>{
         })}
 });
 
+//Get Month
+router.get('/getMonth', async (req, res) => {
+    try {
+        const bookings = await Booking.find();
+        const bookingsByMonth = bookings.reduce((acc, booking) => {
+          const month = new Date(booking.dateTime).getMonth();
+          acc[month] = (acc[month] || 0) + 1;
+          return acc;
+        }, {});
+        const bookingsData = Object.entries(bookingsByMonth).map(([month, count]) => {
+          return { month: parseInt(month), count };
+        });
+        res.json(bookingsData);
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+      }
+    }
+        
+);
+
 //Get by id
 router.get('/:getbyId', async(req,res) =>{
     try{
