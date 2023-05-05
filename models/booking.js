@@ -16,7 +16,7 @@ const BookingSchema = mongoose.Schema({
     gender:{
         type: String,
         enum: {
-            values: ["Male", "Female", "Other"],
+            values: ["Male", "Female"],
             message: "Please choose gender using the above options",
         },
         required: true
@@ -37,7 +37,7 @@ const BookingSchema = mongoose.Schema({
         },
         required: true
     },
-    dateTime:{
+    date:{
         type: Date,
         required: true
     }

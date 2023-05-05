@@ -14,6 +14,35 @@ router.get('/get', async(req,res) =>{
         })}
 });
 
+//total number of male ans females 
+router.get('/total-gender', async (req, res) => {
+    try {
+      const pipeline = [
+        {
+          $group: {
+            _id: "$gender",
+            count: { $sum: 1 }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            Male: { $sum: { $cond: [{$eq: ["$_id", "Male"]}, "$count", 0] } },
+            Female: { $sum: { $cond: [{$eq: ["$_id", "Female"]}, "$count", 0] } }
+          }
+        }
+      ];
+  
+      const result = await Booking.aggregate(pipeline);
+  
+      res.json(result[0]);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
+
 //Get Month
 router.get('/getMonth', async (req, res) => {
     try {
@@ -58,7 +87,7 @@ router.post('/post', async(req,res)=>{
         cellphone_Number: req.body.cellphone_Number,
         email: req.body.email,
         civic_Service: req.body.civic_Service,
-        dateTime: req.body.dateTime
+        date: req.body.date
     });
    try{
     const newBooking = await booking.save();
