@@ -47,7 +47,7 @@ router.post('/post', async(req,res)=>{
         cellphone_Number: req.body.cellphone_Number,
         email: req.body.email,
         civic_Service: req.body.civic_Service,
-        date: req.body.date
+        dateTime: req.body.dateTime
     });
    try{
     const newBooking = await booking.save();
