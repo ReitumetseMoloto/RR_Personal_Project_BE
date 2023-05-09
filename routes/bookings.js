@@ -13,56 +13,16 @@ router.get('/get', async(req,res) =>{
             message: error.message
         })}
 });
-
-//total number of male ans females 
-router.get('/total-gender', async (req, res) => {
+  
+// Define an API endpoint for updating bookings
+router.put('/bookings/:id', async (req, res) => {
     try {
-      const pipeline = [
-        {
-          $group: {
-            _id: "$gender",
-            count: { $sum: 1 }
-          }
-        },
-        {
-          $group: {
-            _id: null,
-            Male: { $sum: { $cond: [{$eq: ["$_id", "Male"]}, "$count", 0] } },
-            Female: { $sum: { $cond: [{$eq: ["$_id", "Female"]}, "$count", 0] } }
-          }
-        }
-      ];
-  
-      const result = await Booking.aggregate(pipeline);
-  
-      res.json(result[0]);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Server error' });
+      const booking = await Booking.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      res.json(booking);
+    } catch (err) {
+      res.status(500).send(err);
     }
   });
-  
-
-//Get Month
-router.get('/getMonth', async (req, res) => {
-    try {
-        const bookings = await Booking.find();
-        const bookingsByMonth = bookings.reduce((acc, booking) => {
-          const month = new Date(booking.dateTime).getMonth();
-          acc[month] = (acc[month] || 0) + 1;
-          return acc;
-        }, {});
-        const bookingsData = Object.entries(bookingsByMonth).map(([month, count]) => {
-          return { month: parseInt(month), count };
-        });
-        res.json(bookingsData);
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Internal server error' });
-      }
-    }
-        
-);
 
 //Get by id
 router.get('/:getbyId', async(req,res) =>{
